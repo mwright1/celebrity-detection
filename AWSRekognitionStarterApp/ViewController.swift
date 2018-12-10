@@ -25,6 +25,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var infoLinksMap: [Int:String] = [1000:""]
     var rekognitionObject:AWSRekognition?
     
+    let rekognitionClient:AWSRekognition = AWSRekognition.default()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -39,14 +41,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
     
     //MARK: - Button Actions
+    
+    func requestImage() {
+        let image = UIImage(named: "MyImage.png")
+        if let request = AWSRekognitionDetectLabelsRequest() {
+        request.image = image
+        request.maxLabels = 1
+        request.minConfidence = 99
+        }
+    }
+    
     @IBAction func CameraOpen(_ sender: Any) {
         let pickerController = UIImagePickerController()
         pickerController.delegate = self
