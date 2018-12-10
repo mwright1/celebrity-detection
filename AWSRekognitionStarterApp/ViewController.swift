@@ -44,14 +44,14 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     
     //MARK: - Button Actions
     
-    func requestImage() {
-        let image = UIImage(named: "MyImage.png")
-        if let request = AWSRekognitionDetectLabelsRequest() {
-        request.image = image
-        request.maxLabels = 1
-        request.minConfidence = 99
-        }
-    }
+//    func requestImage() {
+//        let image = UIImage(named: "MyImage.png")
+//        if let request = AWSRekognitionDetectLabelsRequest() {
+//        request.image = image
+//        request.maxLabels = 1
+//        request.minConfidence = 99
+//        }
+//    }
     
     @IBAction func CameraOpen(_ sender: Any) {
         let pickerController = UIImagePickerController()
@@ -99,16 +99,24 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         rekognitionObject = AWSRekognition.default()
         let celebImageAWS = AWSRekognitionImage()
         celebImageAWS?.bytes = celebImageData
-        let celebRequest = AWSRekognitionRecognizeCelebritiesRequest()
-        celebRequest?.image = celebImageAWS
+       // let celebRequest = AWSRekognitionRecognizeCelebritiesRequest()
+        let faceRequest = AWSRekognitionDetectLabelsRequest()
+        faceRequest?.image = celebImageAWS
         
-        rekognitionObject?.recognizeCelebrities(celebRequest!){
+//        rekognitionObject?.recognizeCelebrities(celebRequest!){
+        rekognitionObject?.compareFaces(faceRequest!) {
             (result, error) in
             if error != nil{
                 print(error!)
                 return
             }
-            
+            if result != nil{
+                print(result!)
+            }
+            else{
+                print("No result")
+            }
+    
             //1. First we check if there are any celebrities in the response
             if ((result!.celebrityFaces?.count)! > 0){
                 
