@@ -95,16 +95,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
                 subView.removeFromSuperview()
             }
         }
+        let request = AWSRekognitionCompareFacesRequest()
+        request?.sourceImage = "jeff_portrait.png"
+        request?.targetImage =
+    
+        
         
         rekognitionObject = AWSRekognition.default()
-        let celebImageAWS = AWSRekognitionImage()
         celebImageAWS?.bytes = celebImageData
        // let celebRequest = AWSRekognitionRecognizeCelebritiesRequest()
-        let faceRequest = AWSRekognitionDetectLabelsRequest()
-        faceRequest?.image = celebImageAWS
+        if let labelRequest = AWSRekognitionDetectLabelsRequest() {
+        labelRequest.image = celebImageAWS
+        labelRequest.maxLabels = 5
+        labelRequest.minConfidence = 99
+        }
+    //    rekognitionObject?.recognizeCelebrities(celebRequest!){
         
-//        rekognitionObject?.recognizeCelebrities(celebRequest!){
-        rekognitionObject?.compareFaces(faceRequest!) {
+        
+        rekognitionObject?.compareFaces(<#T##request: AWSRekognitionCompareFacesRequest##AWSRekognitionCompareFacesRequest#>)
+            {
             (result, error) in
             if error != nil{
                 print(error!)
